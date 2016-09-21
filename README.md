@@ -1,2 +1,4 @@
 # halloweenR
-Halloween and candy data
+Halloween and candy data.
+Candy, candy, candy.
+And more.
