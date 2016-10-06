@@ -40,6 +40,7 @@ octobers$year <- as.numeric(octobers$year)
 
 p4 <-ggplot(octobers, aes(year, candy.sales)) + geom_point()
 p4 +geom_smooth()
+p4 + ylab("candy sales")
 
 #so, looks to me like candy sales in oct went up over time. time for a model?
 #next step, check distribution of candy sales
@@ -55,7 +56,19 @@ anova(m1, test="Chisq") #year effect is significant.
 #now what about controlling for the background annual candy sales
 candy$year <- as.factor(candy$year)
 annual.sales <-candy %>% group_by(year) %>% summarise(mean = mean(candy.sales))
+annual.sales
 
+octobers<- mutate(octobers, weighted = (octobers$candy.sales/annual.sales$mean))
+
+p5 <-ggplot(octobers, aes(year, weighted)) + geom_point()
+p5 +geom_smooth(method=lm)
+
+p6 <- ggplot(octobers) + geom_histogram(aes(weighted))
+p6
+
+m2 <- lm(weighted ~year, data= octobers)
+summary(m2)
+anova(m2, test="Chisq")
 
 ```
 
