@@ -1,0 +1,61 @@
+---
+title:
+author: "cjlortie"
+date: "october 2016"
+output:
+  html_document:
+    theme: yeti
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+  pdf_document:
+    toc: yes
+---
+#An exploration of Halloween candy sales.
+
+###Purpose
+To explore candy sales patterns in Canada and the USA and explore a limited set of consequences.
+
+###Canadian candy patterns
+```{r, data Canada}
+candy <-read.csv("data/canada/canadian.candy.sales.csv")
+library(tibble)
+candy <- as_data_frame(candy)
+candy
+candy$year <-as.factor(candy$year) #need to assign as ordinal so set as factor
+library(ggplot2)
+p1 <-ggplot(candy) +geom_boxplot(mapping = aes(year, candy.sales)) + coord_flip()
+p1 #ok but this is annual candy sales. I want just october. Might be cool to think about whether candy sales are going up in general every year not just at Halloween.
+#now, need to extract just Halloween.
+#note, sales end on first of month, so need to take just Nov 1 from each year.
+library(dplyr)
+octobers <- candy %>% filter(month == 11)
+octobers #ok so now I think I have just Halloween sales.
+p2 <-ggplot(octobers) +geom_boxplot(mapping = aes(year, candy.sales)) + coord_flip()
+p2 #weird as do not have means per month, so going to switch to point plots
+
+p3 <-ggplot(octobers) +geom_point(mapping = aes(year, candy.sales))
+p3 #OK this looks a lot better to me
+octobers$year <- as.numeric(octobers$year)
+
+p4 <-ggplot(octobers, aes(year, candy.sales)) + geom_point()
+p4 +geom_smooth()
+
+#so, looks to me like candy sales in oct went up over time. time for a model?
+#next step, check distribution of candy sales
+p5 <-ggplot(octobers) + geom_histogram(aes(candy.sales)) #changing binwidth crashes it.
+p5
+
+#linear model?
+m1 <- lm(candy.sales ~year, data= octobers)
+summary(m1) #both intercept and slope of line significant different from 0
+anova(m1, test="Chisq") #year effect is significant.
+
+#weak but not bad.
+#now what about controlling for the background annual candy sales
+candy$year <- as.factor(candy$year)
+annual.sales <-candy %>% group_by(year) %>% summarise(mean = mean(candy.sales))
+
+
+```
+
