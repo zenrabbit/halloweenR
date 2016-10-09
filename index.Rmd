@@ -18,11 +18,14 @@ To examine candy sales patterns in Canada and the USA and explore a limited set 
 
 ###Canadian candy patterns
 ```{r, data Canada}
+#read basic sales data ####
 candy <-read.csv("data/canada/canadian.candy.sales.csv")
 library(tibble)
 candy <- as_data_frame(candy)
 candy
 candy$year <-as.factor(candy$year) #need to assign as ordinal so set as factor
+
+#Data viz first to 'see' patterns####
 library(ggplot2)
 p1 <-ggplot(candy) +geom_boxplot(mapping = aes(year, candy.sales)) + coord_flip()
 p1 #ok but this is annual candy sales. I want just october. Might be cool to think about whether candy sales are going up in general every year not just at Halloween.
@@ -47,7 +50,7 @@ p4 + ylab("candy sales")
 p5 <-ggplot(octobers) + geom_histogram(aes(candy.sales)) #changing binwidth crashes it.
 p5
 
-#linear model?
+#linear model to exlore potential patterns####
 m1 <- lm(candy.sales ~year, data= octobers)
 summary(m1) #both intercept and slope of line significant different from 0
 anova(m1, test="Chisq") #year effect is significant.
@@ -69,6 +72,9 @@ p6
 m2 <- lm(weighted ~year, data= octobers)
 summary(m2)
 anova(m2, test="Chisq")
+
+#Interpretation.####
+#Candy sales at Halloween increasing over time. However, per annum candy sales also increasing. We just buy more candy year round!
 
 #Now, need to read in associated data including number of Canadian children at trick-or-treating age, onset of health issues for same-aged children in Canada, and total sugar consumption per person.
 
