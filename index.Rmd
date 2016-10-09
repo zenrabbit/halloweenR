@@ -12,9 +12,9 @@ output:
     toc: yes
 ---
 #An exploration of Halloween candy sales.
-
+![](./halloween.jpg)
 ###Purpose
-To explore candy sales patterns in Canada and the USA and explore a limited set of consequences.
+To examine candy sales patterns in Canada and the USA and explore a limited set of potential consequences.
 
 ###Canadian candy patterns
 ```{r, data Canada}
@@ -70,5 +70,11 @@ m2 <- lm(weighted ~year, data= octobers)
 summary(m2)
 anova(m2, test="Chisq")
 
+#Now, need to read in associated data including number of Canadian children at trick-or-treating age, onset of health issues for same-aged children in Canada, and total sugar consumption per person.
+
 ```
+
+###USA candy patterns
+Hack in here before Oct 31, 2016 :)!
+Data from National Confectionary Association and USA spending patterns summarised by Statistica in appropriate folder on [Github](https://github.com/cjlortie/halloweenR).
 
