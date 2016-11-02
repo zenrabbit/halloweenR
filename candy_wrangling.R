@@ -4,8 +4,13 @@ library(readr)
 library(stringr)
 library(ggplot2)
 
+# list the files
 files <- list.files(path = "data/usa",pattern = "candy.csv", full.names = T)
+
+# Read the files
 l <- lapply(files, read_csv)
+
+# combine the dataframes
 d <- bind_rows(l, .id="year") %>%
   mutate(
     candy = ifelse(is.na(candy), X1, candy)) %>%
@@ -14,15 +19,15 @@ d <- bind_rows(l, .id="year") %>%
   # mutate(
   #   year = as.integer(year),
   #   year = recode(year, c(`1`=2009,`2`=2010)))
-  
-str(d)
 
+# Filter the Halloween candies
 h <- d %>%
   # filter(candy %in% c(
   #   "SEASONAL NON-CHOCOLATE HALLOWEEN CANDY",
   #   "SEASONAL CHOCOLATE HALLOWEEN CANDY"))
   filter(str_detect(candy,"HALLOWEEN"))
 
+# Plot
 ggplot(h, aes(year, `52 Weeks Ending`, color = candy)) + 
   geom_point() + 
   geom_line() + 
