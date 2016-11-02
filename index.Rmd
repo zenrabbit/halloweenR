@@ -83,4 +83,3 @@ anova(m2, test="Chisq")
 ###USA candy patterns
 Hack in here before Oct 31, 2016 :)!
 Data from National Confectionary Association and USA spending patterns summarised by Statistica in appropriate folder on [Github](https://github.com/cjlortie/halloweenR).
-
